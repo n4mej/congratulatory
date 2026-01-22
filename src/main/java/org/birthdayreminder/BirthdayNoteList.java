@@ -15,13 +15,13 @@ public class BirthdayNoteList {
         return birthdayNoteArrayList;
     }
 
-    public void setBirthdayNoteArrayList(ArrayList<BirthdayNote> birthdayNoteArrayList) {
-        this.birthdayNoteArrayList = birthdayNoteArrayList;
-    }
+//    public void setBirthdayNoteArrayList(ArrayList<BirthdayNote> birthdayNoteArrayList) {
+//        this.birthdayNoteArrayList = birthdayNoteArrayList;
+//    }
 
     public void add(BirthdayNote birthdayNote){
         birthdayNoteArrayList.add(birthdayNote);
-        System.out.println("Запись успешно добавлена!");
+//        System.out.println("Запись успешно добавлена!");
     }
 
 //    public void add(String name, int year, int month, int day) {
@@ -32,7 +32,7 @@ public class BirthdayNoteList {
     public void delete(BirthdayNote birthdayNote){
         try {
             birthdayNoteArrayList.remove(birthdayNote);
-            System.out.println("Запись успешно удалена!");
+//            System.out.println("Запись успешно удалена!");
         }
         catch (ConcurrentModificationException e){
             System.out.println("Ошибка удаления записи!");
