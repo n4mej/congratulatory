@@ -32,7 +32,6 @@ public class BirthdayNoteList {
     public void delete(BirthdayNote birthdayNote){
         try {
             birthdayNoteArrayList.remove(birthdayNote);
-//            System.out.println("Запись успешно удалена!");
         }
         catch (ConcurrentModificationException e){
             System.out.println("Ошибка удаления записи!");
@@ -54,8 +53,6 @@ public class BirthdayNoteList {
         while (needMoreLoop){
             needMoreLoop = false;
             for(int i=1; i<birthdayNoteArrayList.size(); i++){
-//                System.out.println(birthdayNoteArrayList.get(i).getDate().getDayOfYear());
-//                System.out.println(birthdayNoteArrayList.get(i-1).getDate().getDayOfYear());
                 if(birthdayNoteArrayList.get(i).getDate().getDayOfYear()<
                         birthdayNoteArrayList.get(i-1).getDate().getDayOfYear()){
                     swapByIndex(i,i-1);
@@ -66,17 +63,9 @@ public class BirthdayNoteList {
     }
 
     public void swapByIndex(int index1, int index2){
-//        System.out.println("Меняем "+index1+" с "+index2);
-//        System.out.println("-ДО-");
-//        System.out.println(birthdayNoteArrayList.get(index1));
-//        System.out.println(birthdayNoteArrayList.get(index2));
-//        System.out.println("-ПОСЛЕ-");
         BirthdayNote temp = birthdayNoteArrayList.get(index1);
         birthdayNoteArrayList.set(index1,birthdayNoteArrayList.get(index2));
         birthdayNoteArrayList.set(index2,temp);
-//        System.out.println(birthdayNoteArrayList.get(index1));
-//        System.out.println(birthdayNoteArrayList.get(index2));
-//        System.out.println("----");
 
     }
 
@@ -89,35 +78,52 @@ public class BirthdayNoteList {
         return null;
     }
 
-//    public void deleteByName(String name){
-//        delete(findByName(name));
-//    }
-
     public boolean isEmpty(){
         return birthdayNoteArrayList.isEmpty();
     }
     
-    public BirthdayNote findNearBirthday(){
+    public void printNearBirthday(){
         if (birthdayNoteArrayList.isEmpty()) {
             System.out.println("Список пуст");
-            return null;
+            return;
         }
-        BirthdayNote nearBirthdayNote = birthdayNoteArrayList.get(0);
+        boolean finded = false;
+        BirthdayNote nearBirthdayNote = findEarlyBirthday();
         for (BirthdayNote birthdayNote : birthdayNoteArrayList){
             if (birthdayNote.getDate().getDayOfYear() == LocalDate.now().getDayOfYear())
             {
                 System.out.println("Ближайшее день рождения сегодня!");
-                return birthdayNote;
+                System.out.println(birthdayNote);
+                return;
             }
             if (birthdayNote.getDate().getDayOfYear()>LocalDate.now().getDayOfYear()){
-                if (birthdayNote.getDate().getDayOfYear() - LocalDate.now().getDayOfYear() <
+                if (birthdayNote.getDate().getDayOfYear() - LocalDate.now().getDayOfYear() <=
                         nearBirthdayNote.getDate().getDayOfYear() - LocalDate.now().getDayOfYear()){
                     nearBirthdayNote = birthdayNote;
+                    System.out.println("Ближайший день рождения - " + nearBirthdayNote.getDate().toString() + " числа");
+                    System.out.println(nearBirthdayNote);
+                    finded = true;
                 }
             }
         }
-        return nearBirthdayNote;
+        if (!finded) {
+            for (BirthdayNote birthdayNote : birthdayNoteArrayList){
+                if (birthdayNote.getDate().getDayOfYear() <=
+                        nearBirthdayNote.getDate().getDayOfYear()){
+                    nearBirthdayNote = birthdayNote;
+                    System.out.println("Ближайшин день рождения - " + nearBirthdayNote.getDate().toString() + " числа");
+                    System.out.println(nearBirthdayNote);
+                }
+            }
+        }
     }
-
+    private BirthdayNote findEarlyBirthday(){
+        BirthdayNote result = birthdayNoteArrayList.get(0);
+        for (BirthdayNote birthdayNote : birthdayNoteArrayList){
+            if(birthdayNote.getDate().getDayOfYear() < result.getDate().getDayOfYear())
+                result = birthdayNote;
+        }
+        return result;
+    }
 
 }

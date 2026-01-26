@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class IOController {
-    public static void writer(BirthdayNoteList birthdayNoteList){
-        try(FileWriter fileWriter = new FileWriter("birthdayList.txt")){
+    public static void writer(BirthdayNoteList birthdayNoteList, String fileName){
+        try(FileWriter fileWriter = new FileWriter(IOController.checkFileName(fileName))){
             for(BirthdayNote birthdayNote : birthdayNoteList.getBirthdayNoteArrayList()){
                 fileWriter.write(birthdayNote.toString());
                 fileWriter.write("\n");
@@ -23,10 +23,10 @@ public class IOController {
         }
     }
 
-    public static BirthdayNoteList reader(){
+    public static BirthdayNoteList reader(String fileName){
         BirthdayNoteList birthdayNoteList = new BirthdayNoteList();
         try {
-            Path path = Paths.get("birthdayList.txt");
+            Path path = Paths.get(IOController.checkFileName(fileName));
             List<String> lines = Files.readAllLines(path);
             for (String line : lines){
                 birthdayNoteList.add(lineToBirthdayNote(line));
@@ -45,4 +45,12 @@ public class IOController {
                 Integer.parseInt(splitedDate[1]),
                 Integer.parseInt(splitedDate[2])));
     }
+        private static String checkFileName(String fileName){
+            if (fileName.endsWith(".txt")){
+                return fileName;
+            }
+            else{
+                return fileName + ".txt";
+            }
+        }
 }

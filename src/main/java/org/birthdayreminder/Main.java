@@ -6,22 +6,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         BirthdayNoteList birthdayNoteList = new BirthdayNoteList();
-//        birthdayNoteList.add(new BirthdayNote("Петров Петр Петрович",
-//                LocalDate.of(1999,2,2)));
-//        birthdayNoteList.add(new BirthdayNote("Сидоров Сидор Сидорович",
-//                LocalDate.of(2002,4,6)));
-//        birthdayNoteList.add(new BirthdayNote("Иванов Иван Иванович",
-//                LocalDate.of(2006,6,19)));
-//        birthdayNoteList.add(new BirthdayNote("Соколова Мария Ивановна",
-//                LocalDate.of(1998,11,23)));
-//        birthdayNoteList.add(new BirthdayNote("Близнецов Виктор Эдуардович",
-//                LocalDate.of(2001,9,11)));
-//        birthdayNoteList.add(new BirthdayNote("Круглова Лидия Давыдовна",
-//                LocalDate.of(2004,12,2)));
-//        birthdayNoteList.add(new BirthdayNote("Сопронова Людмила Егоровна",
-//                LocalDate.of(1991,8,30)));
-//        birthdayNoteList.add(new BirthdayNote("Свиридов Петр Геннадиевич",
-//                LocalDate.of(2005,3,31)));
         Scanner scanner = new Scanner(System.in);
         int inputMenu;
         do{
@@ -31,8 +15,10 @@ public class Main {
             System.out.println("4 - Сортировка");
             System.out.println("5 - Поиск записи по имени");
             System.out.println("6 - Поиск ближайшего дня рождения");
-            System.out.println("7 - Сохранение данных");
-            System.out.println("8 - Чтение данных");
+            System.out.println("7 - Сохранение данных в файл");
+            System.out.println("8 - Загрузка данных из файла");
+            System.out.println("9 - Сохранить записи в базу данных");
+            System.out.println("10 - Загрузить записи из базы данных");
             System.out.println("0 - Выход");
             System.out.print("Введите необходимый пункт - ");
             inputMenu = scanner.nextInt();
@@ -41,27 +27,34 @@ public class Main {
                     birthdayNoteList.print();
                     break;
                 case 2:
-                    MenuNoteAddition.add(birthdayNoteList);
+                    MenuController.add(birthdayNoteList);
                     break;
                 case 3:
-                    MenuNoteDeletion.delete(birthdayNoteList);
+                    MenuController.delete(birthdayNoteList);
                     break;
                 case 4:
                     birthdayNoteList.sort();
                     break;
                 case 5:
-
+                    MenuController.find(birthdayNoteList);
                     break;
                 case 6:
-                    System.out.println(birthdayNoteList.findNearBirthday());
+                    birthdayNoteList.printNearBirthday();
                     break;
                 case 7:
-                    IOController.writer(birthdayNoteList);
+                    MenuController.save(birthdayNoteList);
                     break;
                 case 8:
-                    birthdayNoteList = IOController.reader();
+                    if(MenuController.check())birthdayNoteList = MenuController.read();
+                    break;
+                case 9:
+                    DatabaseRepository.saveAllToDatabase(birthdayNoteList);
+                    break;
+                case 10:
+                    if(MenuController.check())birthdayNoteList = DatabaseRepository.loadAllFromDatabase();
                     break;
                 case 0:
+                    DatabaseConnection.closeConnection();
                     return;
             }
         }
